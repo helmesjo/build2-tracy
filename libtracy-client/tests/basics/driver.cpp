@@ -1,34 +1,28 @@
-#include <sstream>
-#include <stdexcept>
+#include <cstring>
 
-#include <tracy/tracy-client.hpp>
+#include <tracy/Tracy.hpp>
+#include <common/TracySystem.hpp>
 
 #undef NDEBUG
 #include <cassert>
 
 int main ()
 {
-  using namespace std;
-  using namespace tracy_client;
-
-  // Basics.
+  // Thread name round trip (non-inline functions).
   //
-  {
-    ostringstream o;
-    say_hello (o, "World");
-    assert (o.str () == "Hello, World!\n");
-  }
+  tracy::SetThreadName ("driver");
 
-  // Empty name.
+#ifdef TRACY_ENABLE
+  assert (std::strcmp (tracy::GetThreadName (tracy::GetThreadHandle ()),
+                       "driver") == 0);
+#endif
+
+  // Instrumentation macros.
   //
-  try
+  for (int i (0); i != 3; ++i)
   {
-    ostringstream o;
-    say_hello (o, "");
-    assert (false);
-  }
-  catch (const invalid_argument& e)
-  {
-    assert (e.what () == string ("empty name"));
+    ZoneScopedN ("iteration");
+    TracyMessageL ("message");
+    FrameMark;
   }
 }
