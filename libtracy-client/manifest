@@ -16,3 +16,18 @@ depends: * build2 >= 0.18.0
 depends: * bpkg >= 0.18.0
 depends: libspscqueue ^1.1.0-
 depends: liblz4 ^1.10.0
+depends:
+\
+librpmalloc ^2.0.1-
+{
+  # Tracy uses rpmalloc as its private allocator and must not replace the
+  # application's malloc() and operator new.
+  #
+  prefer
+  {
+    config.librpmalloc.override = false
+  }
+
+  accept (!$config.librpmalloc.override)
+}
+\
