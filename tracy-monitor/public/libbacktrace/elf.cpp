@@ -1,1 +1,4 @@
-../../../upstream/public/libbacktrace/elf.cpp
+// Compatibility shim: TracyCallstack.cpp includes "../libbacktrace/elf.cpp"
+// to compile the bundled libbacktrace copy. libbacktrace comes from the
+// libbacktrace package instead.
+//
