@@ -1,0 +1,5 @@
+tracy-profiler
+
+# Testscript output directory (can be symlink).
+#
+test-tracy-profiler
