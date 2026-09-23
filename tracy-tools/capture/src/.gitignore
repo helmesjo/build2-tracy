@@ -1,0 +1,5 @@
+tracy-capture
+
+# Testscript output directory (can be symlink).
+#
+test-tracy-capture
