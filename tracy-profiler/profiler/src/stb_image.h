@@ -1,1 +1,0 @@
-../../../upstream/profiler/src/stb_image.h
