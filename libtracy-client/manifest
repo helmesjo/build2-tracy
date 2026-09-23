@@ -33,3 +33,4 @@ librpmalloc ^2.0.1-
   accept (!$config.librpmalloc.override)
 }
 \
+build-exclude: macos**-gcc** ; Uses <ptrauth.h>, which only Apple Clang provides on macOS.
