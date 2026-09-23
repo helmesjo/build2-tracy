@@ -1,0 +1,3 @@
+profiler/src/achievements symlink=dir
+profiler/src/font symlink=dir
+profiler/src/llm symlink=dir
