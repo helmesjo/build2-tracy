@@ -1,16 +1,25 @@
 : 1
 name: tracy-tools
-version: 0.1.0-a.0.z
-type: other
+version: 0.14.1-a.0.z
+type: exe
 language: c++
-project: build2-tracy
-summary: Tracy Profiler
+project: tracy
+summary: Frame and sampling profiler command line tools
 license: BSD-3-Clause ; BSD 3-Clause "New" or "Revised" License.
 description-file: README.md
 changes-file: NEWS
-url: https://example.org/build2-tracy
-email: helmesjo@gmail.com
-#build-error-email: helmesjo@gmail.com
+url: https://github.com/wolfpld/tracy
+email: wolf@nereid.pl
+package-url: https://github.com/build2-packaging/tracy
+package-email: packaging@build2.org ; Mailing list.
 depends: * build2 >= 0.18.0
 depends: * bpkg >= 0.18.0
-#depends: libhello ^1.0.0
+depends: libcapstone ^6.0.0-
+depends: libzstd ^1.5.5
+depends: libppqsort ^1.0.6-
+depends: libpdqsort ^0.0.1-
+depends: robin-hood-hashing ^3.11.5
+depends: xxhash ^0.8.1
+depends: liblz4 ^1.10.0
+depends: libgetopt_port ^0.0.1
+depends: nlohmann-json ^3.12.0
