@@ -6,3 +6,6 @@ location: tracy-tools/
 
 :
 location: tracy-monitor/
+
+:
+location: tracy-profiler/

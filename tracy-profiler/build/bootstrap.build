@@ -1,0 +1,7 @@
+project = tracy-profiler
+
+using version
+using config
+using test
+using install
+using dist
