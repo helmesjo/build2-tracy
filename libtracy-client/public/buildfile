@@ -5,6 +5,12 @@ import intf_libs += liblz4%lib{lz4}
 import intf_libs += librpmalloc%lib{rpmalloc}
 import intf_libs += concurrentqueue%lib{concurrentqueue}
 
+# Only used for callstack symbol resolution outside Windows (which uses
+# DbgHelp).
+#
+if ($cxx.target.class != 'windows')
+  import impl_libs += libbacktrace%lib{backtrace}
+
 # TracyClient.cpp is a unity source that #includes the other source files, so
 # they are only listed (for distribution), not compiled on their own.
 #

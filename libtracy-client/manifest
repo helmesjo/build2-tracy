@@ -17,6 +17,7 @@ depends: * bpkg >= 0.18.0
 depends: libspscqueue ^1.1.0-
 depends: liblz4 ^1.10.0
 depends: concurrentqueue ^1.0.3
+depends: libbacktrace ^0.0.1- ? ($cxx.target.class != 'windows')
 depends:
 \
 librpmalloc ^2.0.1-
