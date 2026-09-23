@@ -1,0 +1,6 @@
+$out_root/
+{
+  include public/
+}
+
+export $out_root/public/$import.target

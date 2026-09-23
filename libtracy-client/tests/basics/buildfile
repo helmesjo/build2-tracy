@@ -1,0 +1,3 @@
+import libs = libtracy-client%lib{tracy-client}
+
+exe{driver}: {hxx ixx txx cxx}{**} $libs testscript{**}
