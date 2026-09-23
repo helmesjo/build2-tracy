@@ -1,9 +1,17 @@
-: basics
+: usage
 :
-$* 'World' >'Hello, World!'
-
-: missing-name
-:
-$* 2>>EOE != 0
-error: missing name
+$* 2>>EOE == 1
+Usage: embed [-t] <objectName> <source> <destination>
+  destination should be without extension, will create cpp, hpp pair
+  -t: treat source as text, convert line endings to unix
 EOE
+
+: text
+:
+printf 'a\r\nb\r\n' >=in.txt;
+$* -t Test in.txt out &out.hpp &out.cpp;
+cat out.hpp >>~%EOO%
+%.*%*
+constexpr size_t TestSize = 4;
+%.*%*
+EOO

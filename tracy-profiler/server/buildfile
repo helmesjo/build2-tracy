@@ -1,41 +1,44 @@
 intf_libs = # Interface dependencies.
 impl_libs = # Implementation dependencies.
-#import xxxx_libs += libhello%lib{hello}
+import intf_libs += libzstd%lib{zstd}
+import intf_libs += libppqsort%lib{ppqsort}
+import intf_libs += libpdqsort%lib{pdqsort}
+import intf_libs += robin-hood-hashing%lib{robin-hood-hashing}
+import intf_libs += xxhash%lib{xxhash}
+import intf_libs += liblz4%lib{lz4}
+import impl_libs += libcapstone%lib{capstone}
 
-lib{tracy-server}: {hxx ixx txx cxx}{**} $impl_libs $intf_libs
+# Upstream's TracyServer library (cmake/server.cmake). The profiler builds it
+# with statistics.
+#
+./: libue{server}
+
+libue{server}: hxx{** -GitRef} h{*} cxx{*} hxx{GitRef} \
+               ../compat/h{capstone} ../public/common/{h hxx cxx}{*} \
+               $impl_libs $intf_libs
+
+# Version string the profiler prints along with the version (upstream
+# generates it from the git revision).
+#
+hxx{GitRef}: in{GitRef}
+{
+  ref = "v$version.major.$version.minor.$version.patch"
+}
 
 # Build options.
 #
-cxx.poptions =+ "-I$out_root" "-I$src_root"
-
-#obja{*}: cxx.poptions += -DSERVER_STATIC_BUILD
-#objs{*}: cxx.poptions += -DSERVER_SHARED_BUILD
-
-# Export options.
+# Like upstream, the server and public/common headers are also included
+# without a directory (TracyServer's include directories).
 #
-lib{tracy-server}:
-{
-  cxx.export.poptions = "-I$out_root" "-I$src_root"
-  cxx.export.libs = $intf_libs
-}
+cxx.poptions =+ "-I$out_base" "-I$src_base" "-I$src_root/public/common" \
+                "-I$src_root/compat"
 
-#liba{tracy-server}: cxx.export.poptions += -DSERVER_STATIC
-#libs{tracy-server}: cxx.export.poptions += -DSERVER_SHARED
-
-# For pre-releases use the complete version to make sure they cannot
-# be used in place of another pre-release or the final version. See
-# the version module for details on the version.* variable values.
+# System libraries of the server and common sources.
 #
-if $version.pre_release
-  lib{tracy-server}: bin.lib.version = "-$version.project_id"
-else
-  lib{tracy-server}: bin.lib.version = "-$version.major.$version.minor"
+if ($cxx.target.system == 'mingw32')
+  cxx.libs += -lws2_32 -lsecur32 -ladvapi32
+elif ($cxx.target.class == 'windows')
+  cxx.libs += ws2_32.lib secur32.lib advapi32.lib
 
-# Install into the server/ subdirectory of, say, /usr/include/
-# recreating subdirectories.
-#
-{hxx ixx txx}{*}:
-{
-  install         = include/server/
-  install.subdirs = true
-}
+if ($cxx.target.system != 'win32-msvc')
+  cxx.libs += -pthread

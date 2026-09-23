@@ -2,7 +2,11 @@
 #
 #cxx.internal.scope = current
 
-cxx.std = latest
+# Apple SDK headers (included through GLFW's native access header) currently
+# reject the C++26 arithmetic between different enumeration types.
+#
+using cxx.guess
+cxx.std = ($cxx.target.class == 'macos' ? 20 : latest)
 
 using cxx
 
@@ -10,6 +14,14 @@ hxx{*}: extension = hpp
 ixx{*}: extension = ipp
 txx{*}: extension = tpp
 cxx{*}: extension = cpp
+
+# Project-wide Windows definitions, as set by upstream's cmake/config.cmake.
+#
+if ($cxx.target.class == 'windows')
+  cxx.poptions += -DNOMINMAX -DWIN32_LEAN_AND_MEAN \
+                  -D_DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR
+
+using in
 
 # The test target for cross-testing (running tests under Wine, etc).
 #

@@ -1,1 +1,4 @@
-./: {*/ -build/} doc{README.md NEWS} legal{LICENSE} manifest
+# The compat/, dtl/, manual/, and public/ headers, sources, and data are
+# prerequisites of the server and profiler targets.
+#
+./: {*/ -build/ -compat/ -dtl/ -manual/ -public/} doc{README.md NEWS} legal{LICENSE} manifest
