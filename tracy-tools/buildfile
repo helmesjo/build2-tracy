@@ -1,4 +1,4 @@
 # The compat/, getopt/, and public/ headers and sources are prerequisites of
 # the server and tool targets.
 #
-./: {*/ -build/ -compat/ -getopt/ -public/} doc{README.md NEWS} legal{LICENSE} manifest
+./: {*/ -build/ -compat/ -getopt/ -public/} doc{README.md PACKAGE-README.md NEWS} legal{LICENSE} manifest
