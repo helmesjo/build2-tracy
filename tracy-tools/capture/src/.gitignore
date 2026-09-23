@@ -1,5 +1,7 @@
 tracy-capture
+tracy-capture-daemon
 
-# Testscript output directory (can be symlink).
+# Testscript output directories (can be symlinks).
 #
 test-tracy-capture
+test-tracy-capture-daemon
