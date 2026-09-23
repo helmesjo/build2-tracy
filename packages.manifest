@@ -3,3 +3,6 @@ location: libtracy-client/
 
 :
 location: tracy-tools/
+
+:
+location: tracy-monitor/

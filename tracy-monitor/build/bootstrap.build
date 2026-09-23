@@ -1,0 +1,7 @@
+project = tracy-monitor
+
+using version
+using config
+using test
+using install
+using dist
