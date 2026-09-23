@@ -1,9 +1,15 @@
-: basics
-:
-$* 'World' >'Hello, World!'
+v = "$version.major.$version.minor.$version.patch"
 
-: missing-name
+: help
 :
-$* 2>>EOE != 0
-error: missing name
-EOE
+$* -h >>~"%EOO%"
+%tracy-monitor $v / v$v%
+%.*%*
+EOO
+
+: usage
+:
+$* >>~"%EOO%" == 1
+%tracy-monitor $v / v$v%
+%.*%*
+EOO
