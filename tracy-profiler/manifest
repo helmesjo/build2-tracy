@@ -1,16 +1,53 @@
 : 1
 name: tracy-profiler
-version: 0.1.0-a.0.z
-type: other
+version: 0.14.1-a.0.z
+type: exe
 language: c++
-project: build2-tracy
-summary: Tracy Profiler
+project: tracy
+summary: Frame and sampling profiler GUI
 license: BSD-3-Clause ; BSD 3-Clause "New" or "Revised" License.
 description-file: README.md
 changes-file: NEWS
-url: https://example.org/build2-tracy
-email: helmesjo@gmail.com
-#build-error-email: helmesjo@gmail.com
+url: https://github.com/wolfpld/tracy
+email: wolf@nereid.pl
+package-url: https://github.com/build2-packaging/tracy
+package-email: packaging@build2.org ; Mailing list.
 depends: * build2 >= 0.18.0
 depends: * bpkg >= 0.18.0
-#depends: libhello ^1.0.0
+depends: libcapstone ^6.0.0-
+depends: libzstd ^1.5.5
+depends: libppqsort ^1.0.6-
+depends: libpdqsort ^0.0.1-
+depends: robin-hood-hashing ^3.11.5
+depends: xxhash ^0.8.1
+depends: liblz4 ^1.10.0
+depends: nlohmann-json ^3.12.0
+depends:
+\
+libimgui ^1.92.9-
+{
+  require
+  {
+    config.libimgui.freetype = true
+    config.libimgui.use_wchar32 = true
+  }
+}
+\
+# libfreetype (through libimgui) accepts libpng 1.6.37, which does not build
+# with current macOS SDKs.
+#
+depends: libpng ^1.6.58
+depends: libimgui-render-opengl3 ^1.92.9-
+depends: libimgui-platform-glfw ^1.92.9-
+depends: glfw ^3.4.0
+depends: libnativefiledialog-extended ^1.4.0-
+depends: libmd4c ^0.6.0-
+depends: libbase64 ^0.5.2-
+depends: libtidy ^5.8.0-
+depends: libusearch ^2.26.2-
+depends: pugixml ^1.12.1
+depends: libcurl ^8.8.0
+depends: libini ^0.1.1-
+depends: libdtl ^1.21.0-
+depends: stb_image ^2.30.0
+depends: stb_image_resize2 ^2.18.0
