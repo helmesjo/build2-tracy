@@ -2,7 +2,23 @@ intf_libs = # Interface dependencies.
 impl_libs = # Implementation dependencies.
 #import xxxx_libs += libhello%lib{hello}
 
-lib{tracy-client}: {hxx ixx txx cxx}{**} $impl_libs $intf_libs
+# TracyClient.cpp is a unity source that #includes the other source files, so
+# they are only listed (for distribution), not compiled on their own.
+#
+lib{TracyClient}: {h hxx}{**} cxx{TracyClient} $impl_libs $intf_libs
+lib{TracyClient}: cxx{** -TracyClient}: include = adhoc
+lib{TracyClient}: file{tracy/TracyMetal.hmm}
+
+# The TRACY_* feature macros change what the public headers expand to, so
+# the library and its consumers must agree on them.
+#
+feature_poptions =
+
+if $config.libtracy_client.enable
+  feature_poptions += -DTRACY_ENABLE
+
+if $config.libtracy_client.on_demand
+  feature_poptions += -DTRACY_ON_DEMAND
 
 # Build options.
 #
@@ -10,34 +26,77 @@ out_pfx = [dir_path] $out_root/public/
 src_pfx = [dir_path] $src_root/public/
 
 cxx.poptions =+ "-I$out_pfx" "-I$src_pfx"
+cxx.poptions += $feature_poptions
 
-#obja{*}: cxx.poptions += -DTRACY_STATIC_BUILD
-#objs{*}: cxx.poptions += -DTRACY_SHARED_BUILD
+objs{*}: cxx.poptions += -DTRACY_EXPORTS
+
+if ($cxx.target.system == 'mingw32')
+  cxx.libs += -lws2_32 -ldbghelp -lsecur32 -ladvapi32 -luser32
+elif ($cxx.target.class == 'windows')
+  cxx.libs += ws2_32.lib dbghelp.lib advapi32.lib user32.lib
+elif ($cxx.target.class == 'linux')
+  cxx.libs += -ldl
+elif ($cxx.target.class == 'bsd')
+  cxx.libs += -lexecinfo
 
 # Export options.
 #
-lib{tracy-client}:
+lib{TracyClient}:
 {
-  cxx.export.poptions = "-I$out_pfx" "-I$src_pfx"
+  cxx.export.poptions = "-I$out_pfx" "-I$src_pfx" $feature_poptions
   cxx.export.libs = $intf_libs
 }
 
-#liba{tracy-client}: cxx.export.poptions += -DTRACY_STATIC
-#libs{tracy-client}: cxx.export.poptions += -DTRACY_SHARED
+libs{TracyClient}: cxx.export.poptions += -DTRACY_IMPORTS
+
+# The public headers use C++11 threading types inline.
+#
+if ($cxx.target.system != 'win32-msvc')
+{
+  cxx.libs += -pthread
+
+  lib{TracyClient}: cxx.export.libs += -pthread
+}
 
 # For pre-releases use the complete version to make sure they cannot
 # be used in place of another pre-release or the final version. See
 # the version module for details on the version.* variable values.
 #
 if $version.pre_release
-  lib{tracy-client}: bin.lib.version = "-$version.project_id"
+  lib{TracyClient}: bin.lib.version = "-$version.project_id"
 else
-  lib{tracy-client}: bin.lib.version = "-$version.major.$version.minor"
+  lib{TracyClient}: bin.lib.version = "-$version.major.$version.minor"
+
+# Headers are included as <tracy/Tracy.hpp> relative to include/tracy/.
+#
+lib{TracyClient}: cxx.pkgconfig.include = include/tracy/
 
 # Install recreating subdirectories.
 #
-{hxx ixx txx}{*}:
+{h hxx ixx txx}{*}:
 {
-  install         = include/
+  install         = include/tracy/
   install.subdirs = true
+}
+
+tracy/
+{
+  file{TracyMetal.hmm}@./: install = include/tracy/tracy/
+}
+
+# Only the tracy/, client/, and common/ headers are public.
+#
+client/
+{
+  hxx{TracyElf}@./: install = false
+}
+
+libbacktrace/
+{
+  {h hxx}{*}: install = false
+}
+
+client/windows/
+{
+  {h hxx}{*}: install = false
 }

@@ -11,6 +11,15 @@ ixx{*}: extension = ipp
 txx{*}: extension = tpp
 cxx{*}: extension = cpp
 
+# Enable the profiler (TRACY_ENABLE). If false, the instrumentation macros
+# expand to nothing and the library is essentially empty.
+#
+config [bool] config.libtracy_client.enable ?= true
+
+# Only collect profiling data while a server is connected (TRACY_ON_DEMAND).
+#
+config [bool] config.libtracy_client.on_demand ?= false
+
 # The test target for cross-testing (running tests under Wine, etc).
 #
 test.target = $cxx.target
