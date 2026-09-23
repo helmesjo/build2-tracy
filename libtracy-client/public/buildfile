@@ -1,6 +1,7 @@
 intf_libs = # Interface dependencies.
 impl_libs = # Implementation dependencies.
 import intf_libs += libspscqueue%lib{spscqueue}
+import intf_libs += liblz4%lib{lz4}
 
 # TracyClient.cpp is a unity source that #includes the other source files, so
 # they are only listed (for distribution), not compiled on their own.
