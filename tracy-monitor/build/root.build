@@ -11,6 +11,13 @@ ixx{*}: extension = ipp
 txx{*}: extension = tpp
 cxx{*}: extension = cpp
 
+# Like upstream, the monitor and its own copy of the Tracy client are built
+# with the client enabled and its lifetime controlled by the monitor.
+#
+cxx.poptions += -DTRACY_ENABLE -DTRACY_MANUAL_LIFETIME -DTRACY_NO_FRAME_IMAGE
+
+using in
+
 # The test target for cross-testing (running tests under Wine, etc).
 #
 test.target = $cxx.target

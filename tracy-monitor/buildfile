@@ -1,1 +1,3 @@
-./: {*/ -build/} doc{README.md NEWS} legal{LICENSE} manifest
+# The public/ client headers and sources are prerequisites of the monitor.
+#
+./: {*/ -build/ -public/} doc{README.md NEWS} legal{LICENSE} manifest

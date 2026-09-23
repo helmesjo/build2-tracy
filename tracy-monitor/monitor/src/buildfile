@@ -1,6 +1,32 @@
 libs =
 #import libs += libhello%lib{hello}
+import libs += libspscqueue%lib{spscqueue}
+import libs += liblz4%lib{lz4}
+import libs += librpmalloc%lib{rpmalloc}
+import libs += concurrentqueue%lib{concurrentqueue}
+import libs += libbacktrace%lib{backtrace}
 
-exe{tracy-monitor}: {hxx ixx txx cxx}{**} $libs testscript
+# Like upstream, the monitor compiles its own copy of the Tracy client, since
+# it uses client internals that libtracy-client does not export.
+# TracyClient.cpp is a unity source that #includes the other client sources,
+# so those are only listed (for distribution), not compiled on their own.
+#
+exe{tracy-monitor}: cxx{monitor} hxx{GitRef} \
+                    ../../public/cxx{TracyClient} ../../public/{h hxx}{**} \
+                    $libs testscript
+exe{tracy-monitor}: ../../public/cxx{** -TracyClient} \
+                    ../../public/tracy/file{TracyMetal.hmm}: include = adhoc
 
-cxx.poptions =+ "-I$out_root" "-I$src_root"
+# Version string printed along with the version (upstream generates it from
+# the git revision).
+#
+hxx{GitRef}: in{GitRef}
+{
+  ref = "v$version.major.$version.minor.$version.patch"
+}
+
+# The public/ headers are included via "../public/..." relative to public/.
+#
+cxx.poptions =+ "-I$out_root" "-I$src_root" "-I$out_base" "-I$src_root/public"
+
+cxx.libs += -pthread -ldl
