@@ -12,6 +12,7 @@ appropriate for development rather than consumption. If you want to use
 - [`libtracy-client/PACKAGE-README.md`](libtracy-client/PACKAGE-README.md)
 - [`tracy-tools/PACKAGE-README.md`](tracy-tools/PACKAGE-README.md)
 - [`tracy-monitor/PACKAGE-README.md`](tracy-monitor/PACKAGE-README.md)
+- [`tracy-profiler/PACKAGE-README.md`](tracy-profiler/PACKAGE-README.md)
 
 The development setup for `tracy` uses the standard `bdep`-based workflow.
 For example:
