@@ -9,3 +9,84 @@ trust: 70:64:FE:E4:E0:F3:60:F1:B4:51:E1:FA:12:5C:E0:B3:DB:DF:96:33:39:B9:2E:E5:C
 #:
 #role: prerequisite
 #location: https://git.build2.org/hello/libhello.git
+
+:
+role: prerequisite
+location: https://github.com/helmesjo/build2-imgui.git#review
+
+:
+role: prerequisite
+location: https://github.com/build2-packaging/md4c.git#wip-0.6.0
+
+:
+role: prerequisite
+location: https://github.com/helmesjo/build2-base64.git#review
+
+:
+role: prerequisite
+type: dir
+location: ../tracy-deps/build2-capstone/
+
+:
+role: prerequisite
+location: https://github.com/helmesjo/build2-dtl.git#review
+
+:
+role: prerequisite
+location: https://github.com/helmesjo/build2-glad.git#review
+
+:
+role: prerequisite
+location: https://github.com/helmesjo/build2-ini.git#review
+
+:
+role: prerequisite
+location: https://github.com/helmesjo/build2-libbacktrace.git#review
+
+:
+role: prerequisite
+location: https://github.com/helmesjo/build2-nativefiledialog-extended.git#review
+
+:
+role: prerequisite
+location: https://github.com/helmesjo/build2-OpenCL-Headers.git#review
+
+:
+role: prerequisite
+location: https://github.com/helmesjo/build2-OpenCL-ICD-Loader.git#review
+
+:
+role: prerequisite
+location: https://github.com/helmesjo/build2-pdqsort.git#review
+
+:
+role: prerequisite
+location: https://github.com/helmesjo/build2-PPQSort.git#review
+
+:
+role: prerequisite
+location: https://github.com/helmesjo/build2-pybind11.git#review
+
+:
+role: prerequisite
+location: https://github.com/helmesjo/build2-rpmalloc.git#review
+
+:
+role: prerequisite
+location: https://github.com/helmesjo/build2-sdl.git#review
+
+:
+role: prerequisite
+location: https://github.com/helmesjo/build2-SDL_image.git#review
+
+:
+role: prerequisite
+location: https://github.com/helmesjo/build2-SPSCQueue.git#review
+
+:
+role: prerequisite
+location: https://github.com/helmesjo/build2-tidy-html5.git#review
+
+:
+role: prerequisite
+location: https://github.com/helmesjo/build2-USearch.git#review
