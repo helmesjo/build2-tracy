@@ -1,16 +1,37 @@
 : 1
 name: tracy-monitor
-version: 0.1.0-a.0.z
-type: other
+version: 0.14.1-a.0.z
+type: exe
 language: c++
-project: build2-tracy
-summary: Tracy Profiler
+project: tracy
+summary: Frame and sampling profiler monitor for external processes
 license: BSD-3-Clause ; BSD 3-Clause "New" or "Revised" License.
 description-file: README.md
 changes-file: NEWS
-url: https://example.org/build2-tracy
-email: helmesjo@gmail.com
-#build-error-email: helmesjo@gmail.com
+url: https://github.com/wolfpld/tracy
+email: wolf@nereid.pl
+package-url: https://github.com/build2-packaging/tracy
+package-email: packaging@build2.org ; Mailing list.
 depends: * build2 >= 0.18.0
 depends: * bpkg >= 0.18.0
-#depends: libhello ^1.0.0
+depends: libspscqueue ^1.1.0-
+depends: liblz4 ^1.10.0
+depends: concurrentqueue ^1.0.3
+depends: libbacktrace ^0.0.1-
+depends:
+\
+librpmalloc ^2.0.1-
+{
+  # Tracy uses rpmalloc as its private allocator and must not replace the
+  # application's malloc() and operator new.
+  #
+  prefer
+  {
+    config.librpmalloc.override = false
+  }
+
+  accept (!$config.librpmalloc.override)
+}
+\
+build-include: linux**
+build-exclude: ** ; Uses Linux-only APIs (ptrace, perf_event).
