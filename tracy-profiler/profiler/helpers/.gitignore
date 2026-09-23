@@ -1,0 +1,5 @@
+tracy-embed
+
+# Testscript output directory (can be symlink).
+#
+test-tracy-embed
