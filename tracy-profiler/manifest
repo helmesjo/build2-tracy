@@ -51,3 +51,4 @@ depends: libini ^0.1.1-
 depends: libdtl ^1.21.0-
 depends: stb_image ^2.30.0
 depends: stb_image_resize2 ^2.18.0
+build-exclude: macos**-gcc** ; Uses libimgui-platform-glfw, which requires Clang on macOS.
