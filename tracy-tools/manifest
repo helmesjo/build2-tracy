@@ -1,0 +1,16 @@
+: 1
+name: tracy-tools
+version: 0.1.0-a.0.z
+type: other
+language: c++
+project: build2-tracy
+summary: Tracy Profiler
+license: BSD-3-Clause ; BSD 3-Clause "New" or "Revised" License.
+description-file: README.md
+changes-file: NEWS
+url: https://example.org/build2-tracy
+email: helmesjo@gmail.com
+#build-error-email: helmesjo@gmail.com
+depends: * build2 >= 0.18.0
+depends: * bpkg >= 0.18.0
+#depends: libhello ^1.0.0
