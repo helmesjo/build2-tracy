@@ -1,6 +1,17 @@
+# Link lz4 statically: running this tool during install would otherwise
+# need the shared liblz4 both for development (to run the tool) and for
+# install (as a dependency of the installed profiler).
+#
 libs =
-#import libs += libhello%lib{hello}
+import libs += liblz4%liba{lz4}
 
-exe{tracy-embed}: {hxx ixx txx cxx}{**} $libs testscript
+# Upstream's build-time tool that compresses the profiler's fonts and texts
+# into generated sources (see ../src/buildfile).
+#
+exe{tracy-embed}: cxx{embed} ../../public/common/hxx{tracy_lz4 tracy_lz4hc} \
+                  $libs testscript
+{
+  install = false
+}
 
 cxx.poptions =+ "-I$out_root" "-I$src_root"

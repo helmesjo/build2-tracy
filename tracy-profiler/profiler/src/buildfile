@@ -1,6 +1,110 @@
 libs =
-#import libs += libhello%lib{hello}
+import libs += libimgui%lib{imgui}
+import libs += libimgui-render-opengl3%lib{imgui-render-opengl3}
+import libs += libimgui-platform-glfw%lib{imgui-platform-glfw}
+import libs += glfw%lib{glfw}
+import libs += libnativefiledialog-extended%lib{nfd}
+import libs += libmd4c%lib{md4c}
+import libs += libbase64%lib{base64}
+import libs += libtidy%lib{tidy}
+import libs += libusearch%lib{usearch}
+import libs += pugixml%lib{pugixml}
+import libs += libcurl%lib{curl}
+import libs += libini%lib{ini}
+import libs += libdtl%lib{dtl}
+import libs += stb_image%lib{stb_image}
+import libs += stb_image_resize2%lib{stb_image_resize2}
+import libs += nlohmann-json%lib{json}
+import libs += libcapstone%lib{capstone}
 
-exe{tracy-profiler}: {hxx ixx txx cxx}{**} $libs testscript
+include ../../server/
+include ../helpers/
 
-cxx.poptions =+ "-I$out_root" "-I$src_root"
+./: exe{tracy-profiler}
+
+# Fonts and texts that upstream embeds with its embed helper, as
+# <name>@<source> pairs (see Embed() in upstream's CMakeLists.txt).
+#
+text_data = PersonalityAnnoyed@llm/personality.annoyed.md                 \
+            PersonalityEmotion@llm/personality.emotion.md                 \
+            SystemPrompt@llm/system.prompt.md                             \
+            SkillCallstack@llm/skill.callstack.md                         \
+            SkillOptimization@llm/skill.optimization.md                   \
+            ToolsJson@llm/tools.json                                      \
+            Manual@../../manual/tracy.md                                  \
+            Text100Million@achievements/100Million.md                     \
+            TextConnectToClient@achievements/ConnectToClient.md           \
+            TextFindZone@achievements/FindZone.md                         \
+            TextFrameImages@achievements/FrameImages.md                   \
+            TextGlobalSettings@achievements/GlobalSettings.md             \
+            TextInstrumentationIntro@achievements/InstrumentationIntro.md \
+            TextInstrumentationStatistics@achievements/InstrumentationStatistics.md \
+            TextInstrumentFrames@achievements/InstrumentFrames.md         \
+            TextIntro@achievements/Intro.md                               \
+            TextLoadTrace@achievements/LoadTrace.md                       \
+            TextSamplingIntro@achievements/SamplingIntro.md               \
+            TextSaveTrace@achievements/SaveTrace.md
+
+binary_data = FontFixed@font/FiraCode-Retina.ttf                       \
+              FontIcons@'font/Font Awesome 7 Free-Solid-900.otf'       \
+              FontNormal@font/Roboto-Regular.ttf                       \
+              FontBold@font/Roboto-Bold.ttf                            \
+              FontItalic@font/Roboto-Italic.ttf                        \
+              FontBoldItalic@font/Roboto-BoldItalic.ttf                \
+              FontEmoji@font/NotoEmoji-Regular.ttf
+
+# Upstream embeds the texts in text mode (with line endings normalized).
+#
+text_names =
+for d: $text_data
+  text_names += $first($d)
+
+data =
+
+for d: $text_data $binary_data
+{
+  n = $first($d)
+  data += $n
+
+  <hxx{data/$n} cxx{data/$n}>: file{$second($d)} \
+                               ../helpers/exe{tracy-embed} fsdir{data/}
+  {
+    name = $n
+    text = $find($text_names, $n)
+  }
+  {{
+    diag embed ($<[0])
+    o = ($text ? -t : )
+    ($<[1]) $o $name $path($<[0]) $out_base/data/$name
+  }}
+}
+
+exe{tracy-profiler}: cxx{** -BackendEmscripten -BackendWayland \
+                         -profiler/TracyTexture -data/**} \
+                     hxx{** -data/**} h{**} \
+                     {hxx cxx}{$regex.apply($data, '(.+)', 'data/\1')} \
+                     ../../compat/hxx{pugixml} ../../dtl/hxx{dtl} \
+                     ../../server/libue{server} \
+                     $libs testscript
+
+# Included in profiler/TracyTexture-build2.cpp.
+#
+exe{tracy-profiler}: profiler/cxx{TracyTexture}: include = adhoc
+
+# Like upstream, the profiler sources include the generated data headers
+# relative to the build directory and the server and public/common headers
+# without a directory.
+#
+cxx.poptions =+ "-I$out_base" "-I$src_base" \
+                "-I$out_root/server" "-I$src_root/server" \
+                "-I$src_root/public/common" "-I$src_root/compat"
+
+# Like upstream, build a GUI application on Windows (see winmain.cpp).
+#
+if ($cxx.target.system == 'mingw32')
+  cxx.loptions += -mwindows
+elif ($cxx.target.class == 'windows')
+  cxx.loptions += /SUBSYSTEM:WINDOWS
+
+if ($cxx.target.system != 'win32-msvc')
+  cxx.libs += -pthread

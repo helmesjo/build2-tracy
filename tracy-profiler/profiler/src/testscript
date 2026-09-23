@@ -1,9 +1,21 @@
-: basics
-:
-$* 'World' >'Hello, World!'
+v = "$version.major.$version.minor.$version.patch"
 
-: missing-name
+: help
 :
-$* 2>>EOE != 0
-error: missing name
+$* --help >>~"%EOO%"
+%Tracy Profiler $v / v$v%
+%.*%*
+EOO
+
+: missing-file
+:
+$* missing.tracy 2>>EOE == 1
+Cannot open trace file: missing.tracy
+EOE
+
+: not-a-trace
+:
+echo 'not a trace' >=bad.tracy;
+$* bad.tracy 2>>EOE == 1
+The file you are trying to open is not a tracy dump.
 EOE
