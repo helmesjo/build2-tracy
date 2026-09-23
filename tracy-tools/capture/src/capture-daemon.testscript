@@ -1,0 +1,15 @@
+v = "$version.major.$version.minor.$version.patch"
+
+: version
+:
+$* --version >"tracy-capture-daemon $v / v$v"
+
+: usage
+:
+$* >>~"%EOO%" 2>>EOE == 1
+%tracy-capture-daemon $v / v$v%
+%.*%*
+EOO
+Error: Output directory is required (-o)
+
+EOE

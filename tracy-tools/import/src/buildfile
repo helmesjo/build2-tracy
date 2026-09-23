@@ -1,6 +1,26 @@
 libs =
 #import libs += libhello%lib{hello}
 
-exe{tracy-import-chrome}: {hxx ixx txx cxx}{**} $libs testscript
+include ../../server/
+import json_libs = nlohmann-json%lib{json}
 
-cxx.poptions =+ "-I$out_root" "-I$src_root"
+./: exe{tracy-import-chrome tracy-import-fuchsia}
+
+exe{tracy-import-chrome}: cxx{import-chrome} \
+                          ../../server/libue{server-nostats} \
+                          $json_libs $libs testscript
+
+exe{tracy-import-fuchsia}: cxx{import-fuchsia} \
+                           ../../server/libue{server-nostats} \
+                           $libs testscript{import-fuchsia}
+
+# The server headers and GitRef.hpp are included without a directory, like
+# with upstream's TracyServer include directories.
+#
+cxx.poptions =+ "-I$out_root" "-I$src_root" \
+                "-I$out_root/server" "-I$src_root/server" \
+                "-I$src_root/public/common"
+
+# Must match the server variant these tools link (server-nostats).
+#
+cxx.poptions += -DTRACY_NO_STATISTICS

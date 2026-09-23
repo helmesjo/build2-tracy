@@ -1,6 +1,37 @@
 libs =
 #import libs += libhello%lib{hello}
 
-exe{tracy-capture}: {hxx ixx txx cxx}{**} $libs testscript
+include ../../server/
 
-cxx.poptions =+ "-I$out_root" "-I$src_root"
+# Like upstream, link the getopt implementation statically where the
+# bundled getopt header is used (tracy-capture only uses it on Windows).
+#
+import getopt_libs = libgetopt_port%liba{getopt_port}
+
+./: exe{tracy-capture tracy-capture-daemon}
+
+exe{tracy-capture}: cxx{capture CaptureOutput} hxx{CaptureOutput} \
+                    ../../server/libue{server-nostats} $libs testscript
+exe{tracy-capture}: ../../getopt/h{getopt} $getopt_libs: \
+  include = ($cxx.target.class == 'windows')
+
+exe{tracy-capture-daemon}: cxx{capturedaemon CaptureOutput} hxx{CaptureOutput} \
+                           ../../getopt/h{getopt} \
+                           ../../server/libue{server-nostats} \
+                           $getopt_libs $libs testscript{capture-daemon}
+
+# CaptureOutput is compiled once and linked into both executables, so give
+# its object file only the libraries they have in common.
+#
+obje{CaptureOutput}: cxx{CaptureOutput} ../../server/libue{server-nostats} $libs
+
+# The server headers and GitRef.hpp are included without a directory, like
+# with upstream's TracyServer include directories.
+#
+cxx.poptions =+ "-I$out_root" "-I$src_root" \
+                "-I$out_root/server" "-I$src_root/server" \
+                "-I$src_root/public/common"
+
+# Must match the server variant these tools link (server-nostats).
+#
+cxx.poptions += -DTRACY_NO_STATISTICS

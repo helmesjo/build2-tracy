@@ -11,6 +11,14 @@ ixx{*}: extension = ipp
 txx{*}: extension = tpp
 cxx{*}: extension = cpp
 
+# Project-wide Windows definitions, as set by upstream's cmake/config.cmake.
+#
+if ($cxx.target.class == 'windows')
+  cxx.poptions += -DNOMINMAX -DWIN32_LEAN_AND_MEAN \
+                  -D_DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR
+
+using in
+
 # The test target for cross-testing (running tests under Wine, etc).
 #
 test.target = $cxx.target

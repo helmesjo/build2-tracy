@@ -1,6 +1,15 @@
 libs =
 #import libs += libhello%lib{hello}
 
-exe{tracy-csvexport}: {hxx ixx txx cxx}{**} $libs testscript
+include ../../server/
+import libs += libgetopt_port%liba{getopt_port}
 
-cxx.poptions =+ "-I$out_root" "-I$src_root"
+exe{tracy-csvexport}: {hxx ixx txx cxx}{**} ../../getopt/h{getopt} \
+                      ../../server/libue{server} $libs testscript
+
+# The server headers and GitRef.hpp are included without a directory, like
+# with upstream's TracyServer include directories.
+#
+cxx.poptions =+ "-I$out_root" "-I$src_root" \
+                "-I$out_root/server" "-I$src_root/server" \
+                "-I$src_root/public/common"
