@@ -24,21 +24,35 @@ are listed for context.
 | `xxhash` | cppget stable (`^0.8.1`) | `server/tracy_xxhash.h` |
 | `libgetopt_port` | cppget testing (`^0.0.1`) | `getopt/getopt.{h,c}` |
 
+**Already external** (`depends` of `tracy-profiler`, in addition to the
+server dependencies of `tracy-tools`):
+
+| Package | Source | Replaces |
+|---|---|---|
+| `libdtl` | dir `../tracy-deps/build2-dtl` (`^1.21.0-`) | `dtl/` |
+| `libini` | dir `../tracy-deps/build2-ini` (`^0.1.1-`) | `profiler/src/ini.{h,c}` |
+| `stb_image` | cppget testing (`^2.30.0`) | `profiler/src/stb_image.h` |
+| `stb_image_resize2` | cppget testing (`^2.18.0`) | `profiler/src/stb_image_resize.h` (stb_image_resize 0.97) |
+
 `tracy-monitor` compiles its own copy of the Tracy client and has the
 same `depends` as `libtracy-client` (with `libbacktrace` on all of its
 platforms, since it is Linux-only).
 
 `tracy-tools` also depends on `libcapstone`, `libzstd`, `libppqsort`, and
 `nlohmann-json`, which upstream downloads at build time rather than
-bundling.
+bundling. `tracy-profiler` additionally depends on `libimgui` (with the
+OpenGL 3 renderer and GLFW platform backends), `glfw`,
+`libnativefiledialog-extended`, `libmd4c`, `libbase64`, `libtidy`,
+`libusearch`, `pugixml`, and `libcurl`, which upstream also downloads.
 
 ---
 
 ## Currently vendored in this repository
 
-None. `libtracy-client`, `tracy-tools`, and `tracy-monitor` do not
-compile, link, or ship any of Tracy's bundled copies of the libraries
-above: those upstream files are not symlinked into the packages at all.
+None. `libtracy-client`, `tracy-tools`, `tracy-monitor`, and
+`tracy-profiler` do not compile, link, or ship any of Tracy's bundled
+copies of the libraries above: those upstream files are not symlinked into
+the packages at all.
 
 Unmodified upstream Tracy sources still `#include` the bundled copies by
 their upstream paths (for example `"tracy_SPSCQueue.h"` or
@@ -59,6 +73,10 @@ library's header and maps the names and signatures Tracy expects onto it:
 | pdqsort | `tracy-tools/server/tracy_pdqsort.h` | `<libpdqsort/pdqsort.h>`: `pdqsort()` and `pdqsort_branchless()` made visible in `namespace tracy` |
 | robin-hood-hashing | `tracy-tools/server/tracy_robin_hood.h` | `<robin_hood.h>`: the `robin_hood` containers made visible in `namespace tracy` |
 | xxHash | `tracy-tools/server/tracy_xxhash.h` | `<xxhash.h>` (used with `XXH_INLINE_ALL`) |
+| server dependencies | `tracy-profiler/{server,public/common}/` | Copies of the `tracy-tools` compatibility headers above, with the lz4 ones also exposing `LZ4_compressBound()` and `LZ4_compress_HC()` for the embed helper |
+| dtl | `tracy-profiler/dtl/dtl.hpp` | `<dtl/dtl.hpp>` |
+| ini | `tracy-profiler/profiler/src/ini.h` | `<ini/ini.h>`, wrapped in `extern "C"` like the bundled header |
+| stb_image_resize | `tracy-profiler/profiler/src/stb_image_resize.h` | `<stb_image_resize2.h>`: `stbir_resize_uint8()` implemented with `stbir_resize_uint8_linear()` |
 | getopt_port | `tracy-tools/getopt/getopt.h` | `<getopt_port/getopt.h>` |
 
 Upstream `TracyClient.cpp` and `TracyCallstack.cpp` also `#include` the
