@@ -24,6 +24,10 @@ are listed for context.
 | `xxhash` | cppget stable (`^0.8.1`) | `server/tracy_xxhash.h` |
 | `libgetopt_port` | cppget testing (`^0.0.1`) | `getopt/getopt.{h,c}` |
 
+`tracy-monitor` compiles its own copy of the Tracy client and has the
+same `depends` as `libtracy-client` (with `libbacktrace` on all of its
+platforms, since it is Linux-only).
+
 `tracy-tools` also depends on `libcapstone`, `libzstd`, `libppqsort`, and
 `nlohmann-json`, which upstream downloads at build time rather than
 bundling.
@@ -32,9 +36,9 @@ bundling.
 
 ## Currently vendored in this repository
 
-None. `libtracy-client` and `tracy-tools` do not compile, link, or ship
-any of Tracy's bundled copies of the libraries above: those upstream files
-are not symlinked into the packages at all.
+None. `libtracy-client`, `tracy-tools`, and `tracy-monitor` do not
+compile, link, or ship any of Tracy's bundled copies of the libraries
+above: those upstream files are not symlinked into the packages at all.
 
 Unmodified upstream Tracy sources still `#include` the bundled copies by
 their upstream paths (for example `"tracy_SPSCQueue.h"` or
@@ -51,6 +55,7 @@ library's header and maps the names and signatures Tracy expects onto it:
 | concurrentqueue | `libtracy-client/public/client/tracy_concurrentqueue.h` | `<concurrentqueue/concurrentqueue.h>`: Tracy's producer reserve/commit and per-thread bulk dequeue built on the moodycamel public API |
 | libbacktrace | `libtracy-client/public/libbacktrace/backtrace.hpp` | `<backtrace.h>`: `backtrace_pcinfo()` with the function start address Tracy's callbacks expect. `backtrace_create_state_for_file()` (a Tracy-only addition) is not supported. |
 | lz4 | `tracy-tools/public/common/tracy_lz4{,hc}.hpp` | Same as in `libtracy-client` |
+| client dependencies | `tracy-monitor/public/{client,common,libbacktrace}/` | Copies of the `libtracy-client` compatibility headers above |
 | pdqsort | `tracy-tools/server/tracy_pdqsort.h` | `<libpdqsort/pdqsort.h>`: `pdqsort()` and `pdqsort_branchless()` made visible in `namespace tracy` |
 | robin-hood-hashing | `tracy-tools/server/tracy_robin_hood.h` | `<robin_hood.h>`: the `robin_hood` containers made visible in `namespace tracy` |
 | xxHash | `tracy-tools/server/tracy_xxhash.h` | `<xxhash.h>` (used with `XXH_INLINE_ALL`) |
