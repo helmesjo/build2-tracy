@@ -1,9 +1,15 @@
-: basics
-:
-$* 'World' >'Hello, World!'
+v = "$version.major.$version.minor.$version.patch"
 
-: missing-name
+: version
 :
-$* 2>>EOE != 0
-error: missing name
+$* --version >"tracy-merge $v / v$v"
+
+: usage
+:
+$* >>~"%EOO%" 2>>EOE == 1
+%tracy-merge $v / v$v%
+%.*%*
+EOO
+Error: Output file is required (-o)
+
 EOE

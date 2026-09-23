@@ -3,6 +3,6 @@ v = "$version.major.$version.minor.$version.patch"
 : usage
 :
 $* >>~"%EOO%" == 1
-%tracy-import-chrome $v / v$v%
+%tracy-import-fuchsia $v / v$v%
 %.*%*
 EOO
