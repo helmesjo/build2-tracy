@@ -24,3 +24,9 @@ cxx.poptions =+ "-I$out_root" "-I$src_root" \
 # Must match the server variant these tools link (server-nostats).
 #
 cxx.poptions += -DTRACY_NO_STATISTICS
+
+# Upstream prints size_t values with PRIu64, which has the same width on
+# 64-bit targets.
+#
+if ($cxx.class == 'gcc')
+  obje{import-fuchsia}: cxx.coptions += -Wno-format
