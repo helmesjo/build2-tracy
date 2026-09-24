@@ -1,6 +1,6 @@
 # Uncomment to suppress warnings coming from external libraries.
 #
-#cxx.internal.scope = current
+cxx.internal.scope = current
 
 # Apple SDK headers (included through GLFW's native access header) currently
 # reject the C++26 arithmetic between different enumeration types.
@@ -14,6 +14,11 @@ hxx{*}: extension = hpp
 ixx{*}: extension = ipp
 txx{*}: extension = tpp
 cxx{*}: extension = cpp
+
+# Upstream uses sprintf(), which the macOS SDK marks as deprecated.
+#
+if ($cxx.target.class == 'macos')
+  cxx.coptions += -Wno-deprecated-declarations
 
 # Project-wide Windows definitions, as set by upstream's cmake/config.cmake.
 #
