@@ -11,6 +11,11 @@ ixx{*}: extension = ipp
 txx{*}: extension = tpp
 cxx{*}: extension = cpp
 
+# Upstream uses sprintf(), which the macOS SDK marks as deprecated.
+#
+if ($cxx.target.class == 'macos')
+  cxx.coptions += -Wno-deprecated-declarations
+
 # Enable the profiler (TRACY_ENABLE). If false, the instrumentation macros
 # expand to nothing and the library is essentially empty.
 #
