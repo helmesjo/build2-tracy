@@ -1,0 +1,25 @@
+# Import a Chrome trace and process the result with the other tools.
+#
+csvexport = $path($tracy_csvexport)
+update    = $path($tracy_update)
+merge     = $path($tracy_merge)
+
+cat <<EOI >=trace.json;
+{"traceEvents":[
+{"name":"outer","ph":"X","ts":0,"dur":100,"pid":1,"tid":1},
+{"name":"inner","ph":"X","ts":10,"dur":50,"pid":1,"tid":1}
+]}
+EOI
+$* trace.json a.tracy >- &a.tracy;
+$csvexport a.tracy >>~%EOO%;
+name,src_file,src_line,total_ns,total_perc,counts,mean_ns,min_ns,max_ns,std_ns
+%inner,,0,50000,.+%
+%outer,,0,100000,.+%
+EOO
+$update a.tracy b.tracy >- &b.tracy;
+$merge -o c.tracy a.tracy b.tracy >- &c.tracy;
+$csvexport -s ';' c.tracy >>~%EOO%
+%.*%
+%inner;;0;100000;.*;2;.*%
+%outer;;0;200000;.*;2;.*%
+EOO

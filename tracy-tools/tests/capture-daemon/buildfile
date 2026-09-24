@@ -1,0 +1,5 @@
+import t = tracy-tools%exe{tracy-capture-daemon}
+
+testscript{*}: test = $t
+
+./: testscript $t

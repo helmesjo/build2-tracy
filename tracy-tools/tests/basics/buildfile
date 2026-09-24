@@ -1,0 +1,9 @@
+import t = tracy-tools%exe{tracy-import-chrome}
+
+import tracy_csvexport = tracy-tools%exe{tracy-csvexport}
+import tracy_update    = tracy-tools%exe{tracy-update}
+import tracy_merge     = tracy-tools%exe{tracy-merge}
+
+testscript{*}: test = $t
+
+./: testscript $t $tracy_csvexport $tracy_update $tracy_merge

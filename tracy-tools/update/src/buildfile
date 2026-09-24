@@ -5,7 +5,7 @@ include ../../server/
 import libs += libgetopt_port%liba{getopt_port}
 
 exe{tracy-update}: {h hxx ixx txx cxx}{**} ../../getopt/h{getopt} \
-                   ../../server/libue{server-nostats} $libs testscript
+                   ../../server/libue{server-nostats} $libs
 
 # The server headers and GitRef.hpp are included without a directory, like
 # with upstream's TracyServer include directories.
