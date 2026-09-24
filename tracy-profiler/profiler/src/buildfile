@@ -85,7 +85,7 @@ exe{tracy-profiler}: cxx{** -BackendEmscripten -BackendWayland \
                      {hxx cxx}{$regex.apply($data, '(.+)', 'data/\1')} \
                      ../../compat/hxx{pugixml} ../../dtl/hxx{dtl} \
                      ../../server/libue{server} \
-                     $libs testscript
+                     $libs
 
 # Included in profiler/TracyTexture-build2.cpp.
 #

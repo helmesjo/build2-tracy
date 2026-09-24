@@ -2,3 +2,7 @@
 # prerequisites of the server and profiler targets.
 #
 ./: {*/ -build/ -compat/ -dtl/ -manual/ -public/} doc{README.md PACKAGE-README.md NEWS} legal{LICENSE} manifest
+
+# Don't install tests.
+#
+tests/: install = false
