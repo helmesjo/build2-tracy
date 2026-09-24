@@ -8,11 +8,11 @@ import json_libs = nlohmann-json%lib{json}
 
 exe{tracy-import-chrome}: cxx{import-chrome} \
                           ../../server/libue{server-nostats} \
-                          $json_libs $libs testscript
+                          $json_libs $libs
 
 exe{tracy-import-fuchsia}: cxx{import-fuchsia} \
                            ../../server/libue{server-nostats} \
-                           $libs testscript{import-fuchsia}
+                           $libs
 
 # The server headers and GitRef.hpp are included without a directory, like
 # with upstream's TracyServer include directories.

@@ -1,0 +1,5 @@
+import t = tracy-tools%exe{tracy-update}
+
+testscript{*}: test = $t
+
+./: testscript $t

@@ -11,14 +11,14 @@ import getopt_libs = libgetopt_port%liba{getopt_port}
 ./: exe{tracy-capture tracy-capture-daemon}
 
 exe{tracy-capture}: cxx{capture CaptureOutput} hxx{CaptureOutput} \
-                    ../../server/libue{server-nostats} $libs testscript
+                    ../../server/libue{server-nostats} $libs
 exe{tracy-capture}: ../../getopt/h{getopt} $getopt_libs: \
   include = ($cxx.target.class == 'windows')
 
 exe{tracy-capture-daemon}: cxx{capturedaemon CaptureOutput} hxx{CaptureOutput} \
                            ../../getopt/h{getopt} \
                            ../../server/libue{server-nostats} \
-                           $getopt_libs $libs testscript{capture-daemon}
+                           $getopt_libs $libs
 
 # CaptureOutput is compiled once and linked into both executables, so give
 # its object file only the libraries they have in common.
