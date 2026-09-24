@@ -13,7 +13,7 @@ import libs += libbacktrace%lib{backtrace}
 #
 exe{tracy-monitor}: cxx{monitor} hxx{GitRef} \
                     ../../public/cxx{TracyClient} ../../public/{h hxx}{**} \
-                    $libs testscript
+                    $libs
 exe{tracy-monitor}: ../../public/cxx{** -TracyClient} \
                     ../../public/tracy/file{TracyMetal.hmm}: include = adhoc
 
