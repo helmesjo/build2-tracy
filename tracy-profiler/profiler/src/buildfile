@@ -99,6 +99,12 @@ cxx.poptions =+ "-I$out_base" "-I$src_base" \
                 "-I$out_root/server" "-I$src_root/server" \
                 "-I$src_root/public/common" "-I$src_root/compat"
 
+# Upstream prints uint64_t values with %zu, which has the same width on
+# 64-bit targets.
+#
+if ($cxx.class == 'gcc')
+  profiler/obje{TracyView_Options}: cxx.coptions += -Wno-format
+
 # Like upstream, build a GUI application on Windows (see winmain.cpp).
 #
 if ($cxx.target.system == 'mingw32')
