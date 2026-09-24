@@ -1,0 +1,6 @@
+$out_root/
+{
+  include profiler/src/
+}
+
+export $out_root/profiler/src/$import.target
