@@ -1,3 +1,7 @@
 # The public/ client headers and sources are prerequisites of the monitor.
 #
 ./: {*/ -build/ -public/} doc{README.md PACKAGE-README.md NEWS} legal{LICENSE} manifest
+
+# Don't install tests.
+#
+tests/: install = false

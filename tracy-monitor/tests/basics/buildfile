@@ -1,0 +1,5 @@
+import t = tracy-monitor%exe{tracy-monitor}
+
+testscript{*}: test = $t
+
+./: testscript $t
