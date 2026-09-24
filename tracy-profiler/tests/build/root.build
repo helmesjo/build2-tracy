@@ -1,0 +1,8 @@
+# The executables under test are imported, so there is nothing to compile.
+# Only configure C++ for the test target.
+#
+using cxx.config
+
+# The test target for cross-testing (running tests under Wine, etc).
+#
+test.target = $cxx.target

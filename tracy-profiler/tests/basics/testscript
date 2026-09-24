@@ -1,4 +1,4 @@
-v = "$version.major.$version.minor.$version.patch"
+v = '[0-9]+\.[0-9]+\.[0-9]+' # Version in the usage and --version output.
 
 : help
 :

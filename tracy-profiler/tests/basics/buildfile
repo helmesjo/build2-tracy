@@ -1,0 +1,5 @@
+import t = tracy-profiler%exe{tracy-profiler}
+
+testscript{*}: test = $t
+
+./: testscript $t
