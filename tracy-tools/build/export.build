@@ -1,0 +1,25 @@
+# The executables are defined in the buildfiles of their upstream
+# component directories.
+#
+switch $name($import.target): path.match
+{
+  case 'tracy-capture*'
+    d = capture/src/
+  case 'tracy-csvexport'
+    d = csvexport/src/
+  case 'tracy-import-*'
+    d = import/src/
+  case 'tracy-merge'
+    d = merge/src/
+  case 'tracy-update'
+    d = update/src/
+  default
+    fail "unknown target $import.target"
+}
+
+$out_root/$d
+{
+  include ./
+}
+
+export $out_root/$d$import.target
