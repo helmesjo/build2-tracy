@@ -1,0 +1,6 @@
+$out_root/
+{
+  include monitor/src/
+}
+
+export $out_root/monitor/src/$import.target
