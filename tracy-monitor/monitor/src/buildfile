@@ -6,6 +6,11 @@ import libs += librpmalloc%lib{rpmalloc}
 import libs += concurrentqueue%lib{concurrentqueue}
 import libs += libbacktrace%lib{backtrace}
 
+# tracy-monitor uses Linux-only APIs (ptrace, perf_event) and is not built
+# on other platforms.
+#
+./: exe{tracy-monitor}: include = ($cxx.target.class == 'linux')
+
 # Like upstream, the monitor compiles its own copy of the Tracy client, since
 # it uses client internals that libtracy-client does not export.
 # TracyClient.cpp is a unity source that #includes the other client sources,
