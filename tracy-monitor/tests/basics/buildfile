@@ -2,4 +2,6 @@ import t = tracy-monitor%exe{tracy-monitor}
 
 testscript{*}: test = $t
 
-./: testscript $t
+# tracy-monitor is Linux-only; see monitor/src/buildfile.
+#
+./: testscript $t: include = ($cxx.target.class == 'linux')
